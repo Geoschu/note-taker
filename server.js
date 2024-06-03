@@ -52,6 +52,32 @@ app.post("/api/notes", (req, res) => {
   });
 });
 
+// DELETE route to delete a note by ID
+app.delete("/api/notes/:id", (req, res) => {
+  const noteId = req.params.id;
+
+  fs.readFile(path.join(__dirname, "/db/db.json"), "utf8", (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Failed to read notes" });
+    }
+    let notes = JSON.parse(data);
+    notes = notes.filter((note) => note.id !== noteId);
+
+    fs.writeFile(
+      path.join(__dirname, "/db/db.json"),
+      JSON.stringify(notes),
+      (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ error: "Failed to delete note" });
+        }
+        res.json({ message: "Note deleted successfully" });
+      }
+    );
+  });
+});
+
 // Set up the GET * route to serve the index.html file
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/index.html"));
