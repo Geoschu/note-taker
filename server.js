@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const fs = require("fs");
 const path = require("path");
+const { v4: uuidv4 } = require("uuid"); // Require the uuid package
 const PORT = process.env.PORT || 3000;
 
 // Middleware to parse JSON bodies
@@ -28,6 +29,8 @@ app.get("/api/notes", (req, res) => {
 
 app.post("/api/notes", (req, res) => {
   const newNote = req.body;
+  newNote.id = uuidv4(); // Generate a unique ID for the new note
+
   fs.readFile(path.join(__dirname, "/db/db.json"), "utf8", (err, data) => {
     if (err) {
       console.error(err);
