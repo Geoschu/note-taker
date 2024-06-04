@@ -13,7 +13,7 @@ app.use(express.static("public"));
 
 // Set up the GET /notes route
 app.get("/notes", (req, res) => {
-  res.send("Notes Page");
+  res.sendFile(path.join(__dirname, "public/notes.html"));
 });
 
 // Create API routes
